@@ -74,10 +74,23 @@ pub const Stack = struct {
     }
 };
 
+test "Push, pop and peep one element" {
+    const allocator = std.testing.allocator;
+
+    var stack = try Stack.init(allocator);
+    defer stack.deinit();
+
+    const word = @as(u256, 1);
+    try stack.push(word);
+    const peep = try stack.peep();
+    const pop = try stack.pop();
+
+    try std.testing.expectEqual(word, peep);
+    try std.testing.expectEqual(word, pop);
+}
+
 test "Push overflow" {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    var allocator = gpa.allocator();
-    defer _ = gpa.deinit();
+    const allocator = std.testing.allocator;
 
     var stack = try Stack.init(allocator);
     defer stack.deinit();
@@ -89,9 +102,7 @@ test "Push overflow" {
 }
 
 test "Pop underflow" {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    var allocator = gpa.allocator();
-    defer _ = gpa.deinit();
+    const allocator = std.testing.allocator;
 
     var stack = try Stack.init(allocator);
     defer stack.deinit();
@@ -100,9 +111,7 @@ test "Pop underflow" {
 }
 
 test "Peep underflow" {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    var allocator = gpa.allocator();
-    defer _ = gpa.deinit();
+    const allocator = std.testing.allocator;
 
     var stack = try Stack.init(allocator);
     defer stack.deinit();
